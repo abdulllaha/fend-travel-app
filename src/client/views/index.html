@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Travel app</title>
+    </head>
+    <body>
+        <h1>Please tell us where are you going to and when</h1>
+        <h3>so we can show you the forcast for that place in the selected date</h3>
+        <form onsubmit=" return Client.submit(event)">
+            <dev>
+                <label for="city">City</label>
+                <input id="city" type="text" name="city">
+            </dev>
+            <dev>
+                <label for="date">Date</label>
+                <input id="date" type="date" name="date">
+            </dev>
+            <button>Submit</button>
+        </form>
+        <dev class="forcast-container">
+            <h2 id="days"></h2>
+            <p class="city"></p>
+            <p class="weather"></p>
+            <p class="temp"></p>
+            <p class="max-temp"></p>
+            <p class="min-temp"></p>
+            <dev class="image"></dev>
+        </dev>
+    </body>
+</html>
