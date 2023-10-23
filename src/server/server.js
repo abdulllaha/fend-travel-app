@@ -2,8 +2,8 @@ const dotenv = require('dotenv');
 const express = require('express');
 const cors = require('cors');
 const { getGeoLocation } = require('./geoNames');
-const {getWeatherbit} = require('./weatherBit');
-const {getImage} = require('./pixabay');
+const { getWeatherbit } = require('./weatherBit');
+const { getImage } = require('./pixabay');
 
 dotenv.config();
 const app = express();
@@ -31,24 +31,30 @@ app.listen(8081, function () {
 
 app.post('/getCity', async (req, res) => {
   const city = req.body;
-  console.log(' *****************************************************', city);
   const coordinates = await getGeoLocation(city, GEO_API_KEY);
-//   console.log(coordinates)
   try {
     return res.send(coordinates);
   } catch (error) {
     return res.send(error);
   }
 });
+
 app.post('/getWeather', async (req, res) => {
-    const coordinates = req.body;
-    const weather = await getWeatherbit(coordinates, WEATHERBIT_API_KEY);
-    // console.log(weather);
-  return res.send(weather);
+  const coordinates = req.body;
+  const weather = await getWeatherbit(coordinates, WEATHERBIT_API_KEY);
+  try {
+    return res.send(weather);
+  } catch (error) {
+    return res.send(error);
+  }
 });
 
 app.post('/getImage', async (req, res) => {
-    const name = req.body;
-    const image = await getImage(name, PIXABAY_API_KEY);
-    console.log(image);
+  const name = req.body.name;
+  const image = await getImage(name, PIXABAY_API_KEY);
+  try {
+    return res.send(image.image);
+  } catch (error) {
+    return res.send(error);
+  }
 });

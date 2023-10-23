@@ -9,7 +9,6 @@ const getWeatherbit = async (coordinates, key) => {
   }
 };
 const getCurrent = async (coordinates, key) => {
-    // console.log(coordinates);
   const { data } = await axios.get(
     `${currentUrl}${coordinates.lat}&lon=${coordinates.lng}&unites=M&key=${key}`
   );
