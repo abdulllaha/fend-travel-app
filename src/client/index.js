@@ -1,3 +1,4 @@
-import { submit } from "./js/formHandler";
- 
+import { submit } from "./js/app";
+import './styles/style.scss';
+
 export{submit};

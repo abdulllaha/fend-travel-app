@@ -1,32 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Travel app</title>
-    </head>
-    <body>
-        <h1>Please tell us where are you going to and when</h1>
-        <h3>so we can show you the forcast for that place in the selected date</h3>
-        <form onsubmit=" return Client.submit(event)">
-            <dev>
-                <label for="city">City</label>
-                <input id="city" type="text" name="city">
-                <span id="city_error" class="error"></span>
-            </dev>
-            <dev>
-                <label for="date">Date</label>
-                <input id="date" type="date" name="date" min="2023-09-23">
-                <span id="date_error" class="error"></span>
-            </dev>
-            <button>Submit</button>
-        </form>
-        <dev class="forcast-container">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel app</title>
+</head>
+
+<body>
+    <header class="header">
+        <nav>
+            <h1>Udacity Travel App</h1>
+        </nav>
+    </header>
+    <main class="content">
+        <article class="heading">
+            <h1>Please tell us where are you going to and when</h1>
+            <h3>so we can show you the forcast for that place in the selected date</h3>
+        </article>
+        <article>
+            <form onsubmit="return Client.submit(event)">
+                <section>
+                    <label class="label" for="city">City</label>
+                    <input id="city" type="text" name="city">
+                    <span id="city_error" class="error"></span>
+                </section>
+                <section>
+                    <label class="label" for="date">Date</label>
+                    <input id="date" type="date" name="date" min="2023-09-23">
+                    <span id="date_error" class="error"></span>
+                </section>
+                <section>
+                    <button>Submit</button>
+                </section>
+            </form>
+        </article>
+        <article class="forcast-container">
             <h2 id="days"></h2>
             <p class="city"></p>
             <p class="weather"></p>
             <p class="temp"></p>
-            <dev class="image"></dev>
-        </dev>
-    </body>
+            <section class="image"></section>
+        </article>
+    </main>
+    <footer></footer>
+</body>
+
 </html>
