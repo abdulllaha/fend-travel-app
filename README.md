@@ -4,7 +4,7 @@
 this is the final udacity nodejs express project with asynchronous function
 to use external api services.
 Also with webpack and webpack plugins.
-for managing build releases for deferent environment and minifing css and js files.
+for managing build releases for different environment and minifing css and js files.
 
 ## Development
 javascript ES6, HTML5, CSS, nodejs 20, express and webpack
