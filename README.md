@@ -18,8 +18,8 @@ followin udacity instructions; please note that my personal api key is not inclu
     - [pixabay](https://pixabay.com/)
     - [weatherbit](https://www.weatherbit.io/)
 
-- create a file named **-.env-** in the project root.
-- write your api key in **-.env-** file in the same format and variable names
+- create a file named **.env** in the project root.
+- write your api key in **.env** file in the same format and variable names
 
 ```js
 GEO_API_KEY = ${key}
