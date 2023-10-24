@@ -2,18 +2,26 @@ export { submit };
 import axios from 'axios';
 import { getRemainigTime } from './getRemainingTime';
 
+//global variable
 const baseUrl = 'http://localhost:8081/';
 const city = document.getElementById('city');
 const date = document.getElementById('date');
-const cityInput = document.querySelector('#city_error');
-const dateInput = document.querySelector('#date_error');
+const cityError = document.querySelector('#city_error');
+const dateError = document.querySelector('#date_error');
 const image = document.createElement('img');
 const imageContainer = document.querySelector('.image');
-const forcastContainer = document.querySelector('.forcast-container');
+const forcastContainer = document.querySelector('#forcast');
+const days = document.getElementById('days');
+const cityOutput = document.querySelector('#cityOutput');
+const weatherOutput = document.querySelector('#weather');
+const temp = document.querySelector('#temp');
+const span = document.createElement('span');
 
 let time;
 let coordinates;
 let weatherInfo;
+
+// submit function
 function submit(event) {
   event.preventDefault();
   if(!validateInput()){
@@ -23,9 +31,17 @@ function submit(event) {
     city: city.value,
     date: date.value,
   };
+
+  //retrieve city info and use it rto retrieve weather info with image 
   getCity(`${baseUrl}getCity`, { city: form.city })
     .then((getGeoNames) => {
+        if(getGeoNames.error){
         handleError(getGeoNames);
+        clear()
+        return;
+        } else 
+        span.style.display = 'none';
+        //calculate remaining time
       time = getRemainigTime(date.value);
       coordinates = {
         lng: getGeoNames.lng,
@@ -61,6 +77,7 @@ function submit(event) {
     });
 }
 
+// get city info
 async function getCity(url = '', city) {
   const { data } = await axios.post(url, city);
   try {
@@ -70,6 +87,7 @@ async function getCity(url = '', city) {
   }
 }
 
+// get weather info by coordinates
 async function getWeather(url, geoNames) {
   const { data } = await axios.post(url, geoNames);
   try {
@@ -79,58 +97,70 @@ async function getWeather(url, geoNames) {
   }
 }
 
-
-
+//update ui
 async function updateUi(weather) {
-  document.getElementById('days').innerHTML = `your trip is in ${weather.time} days`;
-  document.querySelector('.city').innerHTML = ` to ${city.value}`;
-  document.querySelector('.weather').innerHTML = `the weather is ${weather.weather}`;
-  document.querySelector('.temp').innerHTML = !weather.isRange
+  days.innerHTML = `your trip is in ${weather.time} days`;
+  cityOutput.innerHTML = ` to ${city.value}`;
+  weatherOutput.innerHTML = `the weather is ${weather.weather}`;
+  temp.innerHTML = !weather.isRange
     ? `tempreture is ${weather.temp}&degC`
     : `the forcast in ${date.value} for ${weather.name} is expected to be at minmumm tempreture ${weather.min_temp}&degC and maximumm tempreature ${weather.max_temp}&degC`;
+
     image.src = weather.image;
     image.alt = `this is a description for ${weather.name}`
     imageContainer.appendChild(image);
+    forcastContainer.classList.add('forcast-container');
 }
 
+//retrieve image by name
 async function getImage(url, name) {
   const { data } = await axios.post(url, name);
-  return data;
+  try {
+      return data;
+  }catch(error) {
+    console.log(error);
+  }
 }
 
+//validate city and date input
 function validateInput() {
-    dateInput.style.display = 'none';
-    cityInput.style.display = 'none';
+    dateError.style.display = 'none';
+    cityError.style.display = 'none';
     if(!city.value){
-        cityInput.style.display = 'block';
-        cityInput.style.color = 'red';
-        cityInput.innerHTML = 'please enter a city name';
+        cityError.style.display = 'block';
+        cityError.style.color = 'red';
+        cityError.innerHTML = 'please enter a city name';
         return false;
     } if(!date.value){
-        dateInput.style.display = 'block';
-        dateInput.style.color = 'red';
-        dateInput.innerHTML = 'please select a date';
+        dateError.style.display = 'block';
+        dateError.style.color = 'red';
+        dateError.innerHTML = 'please select a date';
         return false;
     }
     if(getRemainigTime(date.value) < 0){
-        dateInput.style.display = 'block';
-        dateInput.innerHTML = 'please select a valid date';
-        dateInput.style.color = 'red';
+        dateError.style.display = 'block';
+        dateError.innerHTML = 'please select a valid date';
+        dateError.style.color = 'red';
         return false;
     }
     return true;
 }
+
+//handle backend error
 function handleError(data) {
-    const span = document.createElement('span');
-    if(data.error){
         span.style.display = 'none';
         span.innerHTML = data.message;
         span.style.display = 'block';
         span.style.color = 'red';
         forcastContainer.appendChild(span);
-        return false;
-    }else {
-        span.style.display = 'none';
-        return true;
-    }
+}
+
+//clear data when there is an error
+function clear() {
+    days.innerHTML = '';
+    cityOutput.innerHTML = '';
+    weatherOutput.innerHTML = '';
+    temp.innerHTML = '';
+    imageContainer.removeChild(image);
+    forcastContainer.classList.remove('forcast-container');
 }

@@ -1,6 +1,7 @@
 const axios = require('axios');
 const baseUrl = 'https://pixabay.com/api/?key=';
 
+//retrieve image by names
 const getImage = async (name, key) => {
   const { data } = await axios.get(
     `${baseUrl}${key}&q=${name}&image_type=photo`

@@ -1,31 +1,43 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   display: grid;
   grid-template-areas:
     'header header header'
     '. content .'
     'footer footer footer';
-  margin: 0;
   background: #333333;
+  margin: 0px;
+  overflow: hidden;
 }
 
 header {
   grid-area: header;
   background-color: rgb(29, 73, 123);
-  padding: 10px;
+  padding: 20px;
   color: white;
+  left: 0;
+  top: 0;
+  width: 100%;
 }
 
 .heading {
   background-color: #0707074c;
   border-radius: 15px;
-  padding: 2px;
+  padding: 20px;
   margin: 8px 0px;
 }
+
 .content {
   color: white;
   grid-area: content;
   text-align: center;
   height: inherit;
+  clear: both;
 }
 
 form {
@@ -37,22 +49,29 @@ form {
 #city {
   width: 50%;
   height: 2rem;
+  padding: 20px;
+  font-size: large;
+
 }
+
 #date {
   width: 50%;
   height: 2rem;
+  padding: 20px;
+  font-size: large;
 }
 
 input {
-    border-radius: 8px;
-    border:  rgb(29, 73, 123) solid 4px;
-    &:focus {
-        outline: none;
-        border: green solid 4px;
-    }
-    &:hover {
-        border: green solid 4px;
-    }
+  padding: 10px;
+  border-radius: 8px;
+  border: rgb(29, 73, 123) solid 4px;
+  &:focus {
+    outline: none;
+    border: green solid 4px;
+  }
+  &:hover {
+    border: green solid 4px;
+  }
 }
 
 .label {
@@ -61,8 +80,43 @@ input {
 
 footer {
   grid-area: footer;
+  padding: 20px;
+  background-color: rgb(29, 73, 123);
+  color: white;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  clear: both;
 }
 
 section {
   display: inline;
+}
+
+.forcast-container {
+  margin-top: 1%;
+  background-color: #0707074c;
+  border-radius: 15px;
+  padding: 12px;
+}
+
+.font-style {
+  font-size: large;
+  font-weight: bold;
+}
+.btn {
+  padding: 10px;
+  color: white;
+  background-color: rgb(29, 73, 123);
+  border-radius: 8px;
+  border: none;
+  width: 25%;
+  font-size: large;
+  font-weight: bold;
+  &:hover {
+    background-color: rgb(41, 96, 159);
+  }
+ 
 }

@@ -1,3 +1,4 @@
+//calculating remaining time
 function getRemainigTime(date){
     const today = new Date();
     const travelDate = new Date(date);

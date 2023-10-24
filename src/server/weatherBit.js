@@ -1,6 +1,7 @@
 const axios = require('axios');
 const currentUrl = 'https://api.weatherbit.io/v2.0/current?lat=';
 const forcastUrl = 'https://api.weatherbit.io/v2.0/forecast/daily?lat=';
+
 const getWeatherbit = async (coordinates, key) => {
   if (coordinates.time > 0 && coordinates.time < 7) {
     return getCurrent(coordinates, key);
@@ -8,6 +9,8 @@ const getWeatherbit = async (coordinates, key) => {
     return getForcast(coordinates, key);
   }
 };
+
+//retrieve current weather info
 const getCurrent = async (coordinates, key) => {
   const { data } = await axios.get(
     `${currentUrl}${coordinates.lat}&lon=${coordinates.lng}&unites=M&key=${key}`
@@ -24,6 +27,8 @@ const getCurrent = async (coordinates, key) => {
         console.log(error);
     }
 };
+
+//retrieve more than 7 days forcast 
 const getForcast = async (coordinates, key) => {
 
     const { data } = await axios.get(

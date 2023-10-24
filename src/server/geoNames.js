@@ -1,7 +1,7 @@
 const axios = require('axios');
 const baseUrl = 'http://secure.geonames.org/searchJSON?q=';
 const { validateCity } = require('./validateCity');
-
+//get geo location info
 async function getGeoLocation(city, key) {
   const { data } = await axios.get(
     `${baseUrl}${city.city}&maxRows=1&username=${key}`
