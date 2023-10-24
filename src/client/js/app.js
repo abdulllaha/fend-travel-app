@@ -1,4 +1,5 @@
 export { submit };
+export { onLoad };
 import axios from 'axios';
 import { getRemainigTime } from './getRemainingTime';
 
@@ -17,64 +18,70 @@ const weatherOutput = document.querySelector('#weather');
 const temp = document.querySelector('#temp');
 const span = document.createElement('span');
 
+let ready = false;
 let time;
 let coordinates;
 let weatherInfo;
 
+const onLoad = document.addEventListener('DOMContentLoaded', () => {
+  ready = loaded();
+});
 // submit function
 function submit(event) {
-  event.preventDefault();
-  if(!validateInput()){
-    return;
-  }
-  const form = {
-    city: city.value,
-    date: date.value,
-  };
+    //check the dom is ready
+  if (ready) {
+    event.preventDefault();
+    if (!validateInput()) {
+      return;
+    }
+    const form = {
+      city: city.value,
+      date: date.value,
+    };
 
-  //retrieve city info and use it rto retrieve weather info with image 
-  getCity(`${baseUrl}getCity`, { city: form.city })
-    .then((getGeoNames) => {
-        if(getGeoNames.error){
-        handleError(getGeoNames);
-        clear()
-        return;
-        } else 
-        span.style.display = 'none';
+    //retrieve city info and use it rto retrieve weather info with image
+    getCity(`${baseUrl}getCity`, { city: form.city })
+      .then((getGeoNames) => {
+        if (getGeoNames.error) {
+          handleError(getGeoNames);
+          clear();
+          return;
+        } else span.style.display = 'none';
         //calculate remaining time
-      time = getRemainigTime(date.value);
-      coordinates = {
-        lng: getGeoNames.lng,
-        lat: getGeoNames.lat,
-        time: time,
-      };
-      getWeather(`${baseUrl}getWeather`, coordinates)
-        .then((weather) => {
-          getImage(`${baseUrl}getImage`, { name: form.city })
-            .then((image) => {
-              weatherInfo = {
-                name: getGeoNames.name,
-                time: time,
-                weather: weather.weather,
-                temp: weather?.temp,
-                max_temp: weather?.max_temp,
-                min_temp: weather?.min_temp,
-                isRange: weather.isRange,
-                image: image,
-              };
-              updateUi(weatherInfo);
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+        time = getRemainigTime(date.value);
+        coordinates = {
+          lng: getGeoNames.lng,
+          lat: getGeoNames.lat,
+          time: time,
+        };
+        getWeather(`${baseUrl}getWeather`, coordinates)
+          .then((weather) => {
+            getImage(`${baseUrl}getImage`, { name: form.city })
+              .then((image) => {
+                weatherInfo = {
+                  name: getGeoNames.name,
+                  time: time,
+                  weather: weather.weather,
+                  temp: weather?.temp,
+                  max_temp: weather?.max_temp,
+                  min_temp: weather?.min_temp,
+                  isRange: weather.isRange,
+                  image: image,
+                };
+                updateUi(weatherInfo);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 }
 
 // get city info
@@ -106,61 +113,66 @@ async function updateUi(weather) {
     ? `tempreture is ${weather.temp}&degC`
     : `the forcast in ${date.value} for ${weather.name} is expected to be at minmumm tempreture ${weather.min_temp}&degC and maximumm tempreature ${weather.max_temp}&degC`;
 
-    image.src = weather.image;
-    image.alt = `this is a description for ${weather.name}`
-    imageContainer.appendChild(image);
-    forcastContainer.classList.add('forcast-container');
+  image.src = weather.image;
+  image.alt = `this is a description for ${weather.name}`;
+  imageContainer.appendChild(image);
+  forcastContainer.classList.add('forcast-container');
 }
 
 //retrieve image by name
 async function getImage(url, name) {
   const { data } = await axios.post(url, name);
   try {
-      return data;
-  }catch(error) {
+    return data;
+  } catch (error) {
     console.log(error);
   }
 }
 
 //validate city and date input
 function validateInput() {
-    dateError.style.display = 'none';
-    cityError.style.display = 'none';
-    if(!city.value){
-        cityError.style.display = 'block';
-        cityError.style.color = 'red';
-        cityError.innerHTML = 'please enter a city name';
-        return false;
-    } if(!date.value){
-        dateError.style.display = 'block';
-        dateError.style.color = 'red';
-        dateError.innerHTML = 'please select a date';
-        return false;
-    }
-    if(getRemainigTime(date.value) < 0){
-        dateError.style.display = 'block';
-        dateError.innerHTML = 'please select a valid date';
-        dateError.style.color = 'red';
-        return false;
-    }
-    return true;
+  dateError.style.display = 'none';
+  cityError.style.display = 'none';
+  if (!city.value) {
+    cityError.style.display = 'block';
+    cityError.style.color = 'red';
+    cityError.innerHTML = 'please enter a city name';
+    return false;
+  }
+  if (!date.value) {
+    dateError.style.display = 'block';
+    dateError.style.color = 'red';
+    dateError.innerHTML = 'please select a date';
+    return false;
+  }
+  if (getRemainigTime(date.value) < 0) {
+    dateError.style.display = 'block';
+    dateError.innerHTML = 'please select a valid date';
+    dateError.style.color = 'red';
+    return false;
+  }
+  return true;
 }
 
 //handle backend error
 function handleError(data) {
-        span.style.display = 'none';
-        span.innerHTML = data.message;
-        span.style.display = 'block';
-        span.style.color = 'red';
-        forcastContainer.appendChild(span);
+  span.style.display = 'none';
+  span.innerHTML = data.message;
+  span.style.display = 'block';
+  span.style.color = 'red';
+  forcastContainer.appendChild(span);
 }
 
 //clear data when there is an error
 function clear() {
-    days.innerHTML = '';
-    cityOutput.innerHTML = '';
-    weatherOutput.innerHTML = '';
-    temp.innerHTML = '';
-    imageContainer.removeChild(image);
-    forcastContainer.classList.remove('forcast-container');
+  days.innerHTML = '';
+  cityOutput.innerHTML = '';
+  weatherOutput.innerHTML = '';
+  temp.innerHTML = '';
+  imageContainer.removeChild(image);
+  forcastContainer.classList.remove('forcast-container');
+}
+
+function loaded() {
+  return true;
 }
